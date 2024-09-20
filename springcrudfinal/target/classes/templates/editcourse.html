@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Edit Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <script>
+        function confirmSubmission(event) {
+            if (confirm('Are you sure you want to proceed with editing?')) {
+                return true;  // Proceed with form submission
+            }
+            event.preventDefault();  
+            return false;
+        }
+
+        function validateForm() {
+            let valid = true;
+
+            document.getElementById('nameError').innerText = '';
+            document.getElementById('techError').innerText = '';
+            document.getElementById('noOfDaysError').innerText = '';
+
+            // Validate Name
+            const nameInput = document.getElementById('name');
+            if (/^\d+$/.test(nameInput.value)) {
+                document.getElementById('nameError').innerText = 'Name cannot be a number.';
+                valid = false;
+            }
+
+            // Validate Tech
+            const techInput = document.getElementById('tech');
+            if (/^\d+$/.test(techInput.value)) {
+                document.getElementById('techError').innerText = 'Tech Name cannot be a number.';
+                valid = false;
+            }
+
+            // Validate No of Days
+            const noOfDaysInput = document.getElementById('noOfDays');
+            if (isNaN(noOfDaysInput.value) || noOfDaysInput.value.trim() === '') {
+                document.getElementById('noOfDaysError').innerText = 'No of Days must be a number.';
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        function cancelEdit() {
+            window.location.href = '/';  // Redirect to the index page
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container my-5">
+        <h3>Edit Details</h3>
+        <div class="card">
+            <div class="card-body">
+                <div class="col-md-10">
+                    <form th:action="@{/updateCourse}" th:object="${course}" method="post" onsubmit="return validateForm() && confirmSubmission(event)">
+                        <div class="row">
+                            <div class="form-group col-md-8">
+                                <label for="id" class="col-form-label">ID</label>
+                                <input type="text" th:field="*{id}" class="form-control" id="id" placeholder="ID" readonly />
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="name" class="col-form-label">Name</label>
+                                <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="Name" />
+                                <div id="nameError" class="text-danger"></div>
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="tech" class="col-form-label">Tech Name</label>
+                                <input type="text" th:field="*{tech}" class="form-control" id="tech" placeholder="Tech" />
+                                <div id="techError" class="text-danger"></div>
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="noOfDays" class="col-form-label">No of Days</label>
+                                <input type="text" th:field="*{noOfDays}" class="form-control" id="noOfDays" placeholder="No Of Days" />
+                                <div id="noOfDaysError" class="text-danger"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="submit" class="btn btn-primary" value="Submit">
+                                <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
